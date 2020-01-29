@@ -1,43 +1,61 @@
-import React, { useState,useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 import MovieCard from './MovieCard';
 
-const Movie = (props) => {
+class Movie extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      movie: null,
+    };
+  }
  
-  const [movie, setMovie] = useState();
- 
-  useEffect(() => {
-    getMovie = (id) => {
+  componentDidMount() {
+    this.getMovie(this.props.match.params.id)
+  }
+
+  UNSAFE_componentWillReceiveProps(newProps){
+    if(this.props.match.params.id !== newProps.match.params.id){
+      this.getMovie(newProps.match.params.id);     
+    }
+  }
+      
+  getMovie = (id) => {
+      
+    axios.get(`http://localhost:5000/api/movies/${id}`)
+
+        .then(response => {
+          this.setState(() => ({movie: response.data}));
+        })
+
+        .catch(error => {
+          console.error(error);
+        })
+  }
+  
           // change ^^^ that line and grab the id from the URL
     // You will NEED to add a dependency array to this effect hook
 
-       axios
-        .get(`http://localhost:5000/api/movies/${id}`)
-        .then(response => {
-          setMovie(movie.response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-      }
-    }, []);
   
   // Uncomment this only when you have moved on to the stretch goals
-  // const saveMovie = () => {
-  //   const addToSavedList = props.addToSavedList;
-  //   addToSavedList(movie)
-  // }
+  saveMovie = () => {
+    const addToSavedList = this.props.addToSavedList;
+    addToSavedList(this.state.movie)
+  }
 
-  if (!movie) {
+render(){
+
+  if(!this.state.movie) {
     return <div>Loading movie information...</div>;
   }
 
-  const { title, director, metascore, stars } = movie;
   return (
-    <div className="save-wrapper">
-      <MovieCard movie={movie}/>
+    <div className='save-wrapper'>
+      <MovieCard movie={this.state.movie} />
+      <div className='save-button' onClick={this.saveMovie}>Save</div>
     </div>
   );
+}
 }
 
 export default Movie;
