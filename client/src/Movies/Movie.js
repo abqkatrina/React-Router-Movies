@@ -29,7 +29,7 @@ class Movie extends React.Component {
         })
 
         .catch(error => {
-          console.error(error);
+          console.error("uh oh ", error);
         })
   }
   

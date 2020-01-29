@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
-class SavedList extends Component {
-  constructor(props) {
-    super(props)
+class SavedList extends React.Component {
+  constructor(props){
+    super(props);
   }
 
 render(){
@@ -14,7 +14,7 @@ render(){
               return(
                 <NavLink to={`/movies/${movie.id}`} key={movie.id} activeClassName='saved-active'>
                 <span className='saved-movie'>{movie.title}</span>
-                </NavLink>)})};
+                </NavLink>)})}
         <div className='home-button'><Link to='/'>Home</Link></div>
       </div>
     )
